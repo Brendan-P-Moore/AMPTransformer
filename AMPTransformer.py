@@ -52,6 +52,15 @@ from autogluon.tabular import TabularDataset, TabularPredictor
 
 
 warnings.filterwarnings("ignore")
+# configuration class for NLP models
+class CFG:
+    num_workers = 1
+    gradient_checkpointing = False
+    batch_size = 32
+    max_len = 100
+    folds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    pca_dim = 256
+
 
 # Mean pooling the output of the finetuned protein transformer models
 class MeanPooling(nn.Module):
@@ -59,13 +68,13 @@ class MeanPooling(nn.Module):
         super(MeanPooling, self).__init__()
 
     def forward(self, last_hidden_state, attention_mask):
-        # adds a new dimension after the last index of the attention_mask, then expands it to the size of the last hidden state.
+        # adds a new dimension after the last index of the attention mask, then expands it to the size of the last hidden state.
         input_mask_expanded = (
             attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
         )
         sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, 1)
         sum_mask = input_mask_expanded.sum(1)
-        # clamps all elements in the sum_mask such that the minimum value is 1e-9, making any zeroes a small number instead.
+        # clamps all elements in the sum_mask such that the minimum value is 1e-9, changing zeroes to a small number.
         sum_mask = torch.clamp(sum_mask, min=1e-9)
         # returns the mean of the embeddings
         mean_embeddings = sum_embeddings / sum_mask
@@ -79,35 +88,23 @@ class CustomModel(nn.Module):
         self.cfg = cfg
         # configuration for the model, loads the model specified in the config section at the top of the notebook.
         self.config = torch.load(config_path)
-        self
-        if pretrained:
-            self.model = AutoModel.from_pretrained(cfg.model, config=self.config)
-        else:
-            self.model = AutoModel.from_config(self.config)
-
+        self.model = AutoModel.from_config(self.config)
         # returns the mean of the embeddings, as specified in the MeanPooling() function.
         self.pool = MeanPooling()
-        # linear layer, reduces the dimenzionality of the hidden_size (in this case 1024) specified in the config file,
-        # and reduces it to the pca_dim specified in the config file (In this case 64)
+        # linear layer, reduces the dimenzionality of the hidden_size to the pca_dim specified in the CFG class
         self.fc1 = nn.Linear(self.config.hidden_size, self.cfg.pca_dim)
-        # second linear layer, reduces the dimensonality from the pca_dim*6 (6, for 6 features) to 1 (dTm) nn.Linear changed to nn.Softmax for classification
+        # second linear layer, reduces the dimensonality from the pca_dim to 1
         self.fc2 = nn.Linear(self.cfg.pca_dim, 1)
         # initializes weights of the linear layers
         self._init_weights(self.fc1)
         self._init_weights(self.fc2)
 
+    # weight initialization function for the linear layers
     def _init_weights(self, module):
         if isinstance(module, nn.Linear):
             module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
             if module.bias is not None:
                 module.bias.data.zero_()
-        elif isinstance(module, nn.Embedding):
-            module.weight.data.normal_(mean=0.0, std=self.config.initializer_range)
-            if module.padding_idx is not None:
-                module.weight.data[module.padding_idx].zero_()
-        elif isinstance(module, nn.LayerNorm):
-            module.bias.data.zero_()
-            module.weight.data.fill_(1.0)
 
     def feature(self, batch):
         outputs = self.model(batch["input_ids"], batch["attention_mask"])
@@ -116,12 +113,12 @@ class CustomModel(nn.Module):
         return feature
 
     def forward(self, batch):
-        feature = self.fc1(self.feature(batch))
-        output = self.fc2(feature)
-        return output
+        first_linear_output = self.fc1(self.feature(batch))
+        final_output = self.fc2(first_linear_output)
+        return final_output
 
 
-# prepare the sequence input for prediction by the pretrained protbert model
+# prepare the sequences input for prediction by the finetuned NLP models
 def prepare_input(cfg, text):
     if "esm" in cfg.model:
         tokenizer = AutoTokenizer.from_pretrained("esm_models/tokenizer/")
@@ -145,10 +142,6 @@ class TestDataset(Dataset):
     def __init__(self, cfg, df):
         self.cfg = cfg
         self.text = df["sequence"].values
-        if "esm" in cfg.model:
-            tokenizer = AutoTokenizer.from_pretrained("esm_models/tokenizer/")
-        else:
-            tokenizer = AutoTokenizer.from_pretrained("protbert_models/tokenizer/")
 
     def __len__(self):
         return len(self.text)
@@ -156,7 +149,6 @@ class TestDataset(Dataset):
     def __getitem__(self, item):
         # prepares the text inputs for use in the bert model (tokenize, pad, truncate, encode)
         inputs1 = prepare_input(self.cfg, self.text[item])
-        # gets the labels for each item
         # returns a dict of all inputs
         return {
             "input_ids": inputs1["input_ids"],
@@ -215,17 +207,7 @@ def protbert_prediction(file_path):
         os.makedirs(Output_Directory)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # configuration for the protbert model
-    class CFG:
-        num_workers = 1
-        model = "Rostlab/prot_bert"
-        batch_size = 32
-        max_len = 100
-        folds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        pca_dim = 256
-
-    # Tokenizer for protbert
-    tokenizer = AutoTokenizer.from_pretrained("protbert_models/tokenizer/")
-    CFG.tokenizer = AutoTokenizer.from_pretrained("protbert_models/tokenizer/")
+    CFG.model = "Rostlab/prot_bert"
     # path to config file
     CFG.path = Output_Directory
     CFG.config_path = CFG.path + "config.pth"
@@ -272,19 +254,8 @@ def esm_prediction(file_path):
     if not os.path.exists(Output_Directory):
         os.makedirs(Output_Directory)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    # configuration for the esm model
-    class CFG:
-        num_workers = 1
-        model = "facebook/esm2_t33_650M_UR50D"
-        gradient_checkpointing = False
-        batch_size = 32
-        max_len = 100
-        folds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
-        pca_dim = 256
-
-    # Tokenizer for esm
-    tokenizer = AutoTokenizer.from_pretrained("esm_models/tokenizer/")
-    CFG.tokenizer = AutoTokenizer.from_pretrained("esm_models/tokenizer/")
+    # esm model
+    CFG.model = "facebook/esm2_t33_650M_UR50D"
     # path to config file
     CFG.path = Output_Directory
     CFG.config_path = CFG.path + "config.pth"
@@ -337,14 +308,18 @@ def peptide_descriptors(test_df):
 
 
 def ensemble_predict(test_df):
+    # k-folds used to train k models.
     autogluon_folds = 15
     xgb_folds = 20
     cat_folds = 20
     lgb_folds = 20
+    test_df["labels"] = np.zeros  # an empty column of labels that autogluon expects.
     EXCLUDE = ["sequence", "len", "identifiers"]
     FEATURES = [c for c in test_df.columns if c not in EXCLUDE]
     FEATURES_GB = FEATURES.copy()
-    FEATURES_GB.remove("labels")
+    FEATURES_GB.remove(
+        "labels"
+    )  # gradient boosted models do not expect a "labels" feature
     # autogluon prediction, take mean of all 15 models
     model = TabularPredictor.load(f"./autogluon_models_reg/fold0/")
     pred_autogluon = model.predict_proba(test_df[FEATURES])
@@ -378,15 +353,11 @@ def ensemble_predict(test_df):
         load(f"lgb_models/lgb_fold{f}.joblib")
         pred_lgb += lgb.predict_proba(test_df[FEATURES_GB])[:, 1]
     pred_lgb = pred_lgb / lgb_folds
-    test_df["autogluon_predictions"] = pred_autogluon[1]
-    test_df["xgb_predictions"] = pred_xgb
-    test_df["cat_predictions"] = pred_cat
-    test_df["lgb_predictions"] = pred_lgb
     # the final prediction is the average of the autogluon, xgboost, catboost, and lgbm predictions.
-    test_df["mean_predictions"] = (
+    test_df["Antimicrobial_Peptide_Prediction"] = (
         0.25 * pred_autogluon[1] + 0.25 * pred_xgb + 0.25 * pred_cat + 0.25 * pred_lgb
     )
-    return test_df[["identifiers", "sequence", "mean_predictions"]]
+    return test_df[["identifiers", "sequence", "Antimicrobial_Peptide_Prediction"]]
 
 
 def predict(file_path):
@@ -398,7 +369,6 @@ def predict(file_path):
     print("Now Performing ESM Inference, 10 Inferences Total")
     test["esm"] = esm_prediction(file_path)
     print("ESM Inference Complete")
-    test["labels"] = np.zeros
     print("Calculating Peptide Descriptors")
     feature_dataframe = peptide_descriptors(test)
     print("Providing Final Predictions")
