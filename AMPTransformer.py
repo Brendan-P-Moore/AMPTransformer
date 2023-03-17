@@ -1,8 +1,15 @@
 # dependencies
-import numpy as np  # linear algebra
-import pandas as pd  # data processing, CSV file I/O (e.g. pd.read_csv)
+import numpy as np
+import pandas as pd
 import os
-import transformers
+import gc
+import time
+import math
+import string
+import random
+import warnings
+
+import transformers  # for NLP protein models
 from transformers import (
     AutoTokenizer,
     DataCollatorWithPadding,
@@ -14,43 +21,37 @@ from transformers import (
     EsmTokenizer,
     AutoModel,
 )
-import gc
+
 import torch
 import torch.nn as nn
 from tqdm.auto import tqdm
 import tokenizers
-import time
-import math
-import string
-import random
 import joblib
 from joblib import dump, load
-import warnings
 import torch.nn as nn
 from torch.nn import Parameter
 import torch.nn.functional as F
 from torch.optim import Adam, SGD, AdamW
 from torch.utils.data import DataLoader, Dataset
-from sklearn.model_selection import StratifiedKFold
-import Bio
+
+import Bio  # protein physicochemical descriptors
 from Bio import SeqIO
 import propy
 from propy import PyPro
 import peptides
+
 import catboost
 from catboost import CatBoostClassifier
 import lightgbm
 from lightgbm import LGBMClassifier
+import xgboost
+from xgboost import XGBClassifier
 from autogluon.features.generators import AutoMLPipelineFeatureGenerator
 from autogluon.tabular import FeatureMetadata
 from autogluon.tabular import TabularDataset, TabularPredictor
-import xgboost
-from xgboost import XGBClassifier
 
 
 warnings.filterwarnings("ignore")
-os.environ["CUDA_VISIBLE_DEVICES"] = "0,1"
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # Mean pooling the output of the finetuned protein transformer models
 class MeanPooling(nn.Module):
