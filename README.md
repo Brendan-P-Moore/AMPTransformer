@@ -85,4 +85,6 @@ prediction_dataframe = predict('example.fasta', 'protbert_models/', 'esm_models/
 **For many peptide predictions it is recommended to use a gpu.**
 # Description
 
-AMPTransformer is an antimicrobial peptide classifier trained 
+AMPTransformer is an antimicrobial peptide classifier trained on the length-balanced training datasets used by amPEPpy. These datasets were selected because of the equal peptide length distribution for the antimicrobial and non-antimicrobial peptides.
+
+# References
