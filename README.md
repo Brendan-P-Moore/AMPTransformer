@@ -82,7 +82,7 @@ The output of this prediction is a dataframe with three columns. The first colum
 prediction_dataframe = predict('example.fasta', 'protbert_models/', 'esm_models/')
 
 ```
-** For many peptide predictions it is recommended to use a gpu, cpu predictions are approximately 20 times slower **
+**For many peptide predictions it is recommended to use a gpu, cpu predictions are approximately 20 times slower**
 # Description
 
 AMPTransformer is an antimicrobial peptide classifier trained 
