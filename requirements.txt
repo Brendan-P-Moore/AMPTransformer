@@ -9,6 +9,6 @@ lightgbm ==3.3.5
 xgboost ==1.6.2
 joblib ==1.2.0
 tokenizers ==0.13.2
-autogluon ==0.7.0
 propy3 ==1.1.1
 tqdm==4.65.0
+autogluon ==0.7.0
