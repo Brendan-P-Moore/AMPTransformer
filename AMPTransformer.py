@@ -1,45 +1,32 @@
-# dependencies
+# general libraries
 import numpy as np
 import pandas as pd
-import os
 import gc
-import time
-import math
-import string
-import random
-import warnings
 
+# for the NLP models
 import transformers  # for NLP protein models
 from transformers import (
     AutoTokenizer,
-    DataCollatorWithPadding,
-    get_scheduler,
-    get_cosine_schedule_with_warmup,
-    BertModel,
-    BertTokenizer,
-    EsmModel,
-    EsmTokenizer,
     AutoModel,
 )
-
+import tokenizers
 import torch
 import torch.nn as nn
-from tqdm.auto import tqdm
-import tokenizers
-import joblib
-from joblib import dump, load
-import torch.nn as nn
-from torch.nn import Parameter
-import torch.nn.functional as F
-from torch.optim import Adam, SGD, AdamW
 from torch.utils.data import DataLoader, Dataset
 
-import Bio  # protein physicochemical descriptors
+# tracking progress and loading models
+from tqdm.auto import tqdm
+import joblib
+from joblib import dump, load
+
+# loading fasta files and protein physicochemical descriptors
+import Bio
 from Bio import SeqIO
 import propy
 from propy import PyPro
 import peptides
 
+# training the final model
 import catboost
 from catboost import CatBoostClassifier
 import lightgbm
@@ -51,12 +38,11 @@ from autogluon.tabular import FeatureMetadata
 from autogluon.tabular import TabularDataset, TabularPredictor
 
 
-warnings.filterwarnings("ignore")
 # configuration class for NLP models
 class CFG:
     num_workers = 1
     gradient_checkpointing = False
-    batch_size = 32
+    batch_size = 1
     max_len = 100
     folds = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     pca_dim = 256
@@ -129,7 +115,7 @@ def prepare_input(cfg, text):
         return_tensors=None,
         add_special_tokens=True,
         max_length=cfg.max_len,
-        pad_to_max_length=True,
+        padding="max_length",
         truncation=True,
     )
     for k, v in inputs.items():
@@ -162,22 +148,18 @@ def add_spaces(x):
 
 
 # load the fasta sequence file as a dataframe
-def load_test(file_path):
+def load_fasta(file_path):
     with open(file_path) as fasta_file:
-        identifiers = []
-        lengths = []
+        peptides = []
         seq = []
         for seq_record in SeqIO.parse(fasta_file, "fasta"):  # (generator)
             seq.append(str(seq_record.seq))
-            identifiers.append(seq_record.id)
-            lengths.append(len(seq_record.seq))
+            peptides.append(seq_record.id)
     test = pd.DataFrame()
     test["sequence"] = seq
-    test["len"] = lengths
-    test["identifiers"] = identifiers
+    test["peptides"] = peptides
     test.drop_duplicates(inplace=True)
     test.reset_index(drop=True, inplace=True)
-    test["sequence"] = test.sequence.map(add_spaces)
     return test
 
 
@@ -197,106 +179,74 @@ def inference_fn(test_loader, model, device):
     return predictions
 
 
+def pred(test):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    test["sequence"] = test.sequence.map(add_spaces)
+    test_dataset = TestDataset(CFG, test)
+    test_loader = DataLoader(
+        test_dataset,
+        batch_size=CFG.batch_size,
+        shuffle=False,
+        num_workers=CFG.num_workers,
+        pin_memory=True,
+        drop_last=False,
+    )
+    predictions_ = []
+    for fold in CFG.folds:
+        model = CustomModel(CFG, config_path=CFG.config_path, pretrained=False)
+        state = torch.load(
+            CFG.path + f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
+            map_location=torch.device("cpu"),
+        )
+        model.load_state_dict(state["model"])
+        prediction = inference_fn(test_loader, model, device)
+        predictions_.append(prediction)
+        del model, state, prediction
+        gc.collect()
+        torch.cuda.empty_cache()
+    predictions = np.mean(predictions_, axis=0)
+    test["predictions"] = predictions
+    return predictions
+
+
 # classify as antimicrobial or non-antimicrobial using fine-tuned transformer models
 
 
 def protbert_prediction(file_path):
     # define the path and output directory
-    Output_Directory = f"protbert_models/"
-    if not os.path.exists(Output_Directory):
-        os.makedirs(Output_Directory)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    try:
+        CFG.path = f"protbert_models/"
+    except:
+        print("Must download protbert model files, see github instructions for details")
     # configuration for the protbert model
     CFG.model = "Rostlab/prot_bert"
     # path to config file
-    CFG.path = Output_Directory
     CFG.config_path = CFG.path + "config.pth"
-    # load the fasta file
-    test = load_test(file_path)
-    # protbert predict the fasta sequences
-    def pred(test):
-        test_dataset = TestDataset(CFG, test)
-        test_loader = DataLoader(
-            test_dataset,
-            batch_size=CFG.batch_size,
-            shuffle=False,
-            num_workers=CFG.num_workers,
-            pin_memory=True,
-            drop_last=False,
-        )
-        predictions_ = []
-        for fold in CFG.folds:
-            model = CustomModel(CFG, config_path=CFG.config_path, pretrained=False)
-            state = torch.load(
-                CFG.path + f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
-                map_location=torch.device("cpu"),
-            )
-            model.load_state_dict(state["model"])
-            prediction = inference_fn(test_loader, model, device)
-            predictions_.append(prediction)
-            del model, state, prediction
-            gc.collect()
-            torch.cuda.empty_cache()
-        predictions = np.mean(predictions_, axis=0)
-        test["predictions"] = predictions
-        return predictions
-
-    test["predictions"] = pred(test)
-    test["protbert"] = torch.sigmoid(torch.tensor(test["predictions"]))
-    # save a csv for the protbert predictions
-    test.to_csv("protbert_prediction")
-    return test["protbert"]
+    # load the fasta sequence file
+    test = load_fasta(file_path)
+    # classify peptides using pretrained protbert model
+    protbert_pred = torch.sigmoid(torch.tensor(pred(test)))
+    return protbert_pred
 
 
 def esm_prediction(file_path):
     # define the path and output directory
-    Output_Directory = f"esm_models/"
-    if not os.path.exists(Output_Directory):
-        os.makedirs(Output_Directory)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    try:
+        CFG.path = f"esm_models/"
+    except:
+        print("Must download ESM model files, see github instructions for details")
     # esm model
     CFG.model = "facebook/esm2_t33_650M_UR50D"
     # path to config file
-    CFG.path = Output_Directory
     CFG.config_path = CFG.path + "config.pth"
     # load the fasta file
-    test = load_test(file_path)
-
-    def pred(test):
-        test_dataset = TestDataset(CFG, test)
-        test_loader = DataLoader(
-            test_dataset,
-            batch_size=CFG.batch_size,
-            shuffle=False,
-            num_workers=CFG.num_workers,
-            pin_memory=True,
-            drop_last=False,
-        )
-        predictions_ = []
-        for fold in CFG.folds:
-            model = CustomModel(CFG, config_path=CFG.config_path, pretrained=False)
-            state = torch.load(
-                CFG.path + f"{CFG.model.replace('/', '-')}_fold{fold}_best.pth",
-                map_location=torch.device("cpu"),
-            )
-            model.load_state_dict(state["model"])
-            prediction = inference_fn(test_loader, model, device)
-            predictions_.append(prediction)
-            del model, state, prediction
-            gc.collect()
-            torch.cuda.empty_cache()
-        predictions = np.mean(predictions_, axis=0)
-        test["predictions"] = predictions
-        return predictions
-
-    # protbert predict the fasta sequences
-    test["predictions"] = pred(test)
-    test["esm"] = torch.sigmoid(torch.tensor(test["predictions"]))
-    # save a csv for the protbert predictions
-    test.to_csv("esm_prediction")
-    return test["esm"]
+    test = load_fasta(file_path)
+    # classify peptides using pretrained protbert model
+    esm_pred = torch.sigmoid(torch.tensor(pred(test)))
+    return esm_pred
 
 
+# calculating the physicochemical peptide descriptors
 def peptide_descriptors(test_df):
     test_peptide = pd.DataFrame(
         [peptides.Peptide(s).descriptors() for s in test_df["sequence"]]
@@ -308,69 +258,68 @@ def peptide_descriptors(test_df):
 
 
 def ensemble_predict(test_df):
-    # k-folds used to train k models.
-    autogluon_folds = 15
-    xgb_folds = 20
-    cat_folds = 20
-    lgb_folds = 20
+    # folds used to train models.
+    autogluon_model_count = 15
+    gb_model_count = 20
     test_df["labels"] = np.zeros  # an empty column of labels that autogluon expects.
-    EXCLUDE = ["sequence", "len", "identifiers"]
+    EXCLUDE = ["sequence", "peptides"]
     FEATURES = [c for c in test_df.columns if c not in EXCLUDE]
     FEATURES_GB = FEATURES.copy()
     FEATURES_GB.remove(
         "labels"
     )  # gradient boosted models do not expect a "labels" feature
+
     # autogluon prediction, take mean of all 15 models
     model = TabularPredictor.load(f"./autogluon_models_reg/fold0/")
     pred_autogluon = model.predict_proba(test_df[FEATURES])
-    for f in range(1, autogluon_folds):
+    for f in range(1, autogluon_model_count):
         model = TabularPredictor.load(f"./autogluon_models_reg/fold{f}/")
         pred_autogluon += model.predict_proba(test_df[FEATURES])
-    pred_autogluon /= autogluon_folds
+    pred_autogluon /= autogluon_model_count
+
     # xgboost prediction, mean of all 20 models
     xgb = XGBClassifier()
     xgb.load_model(f"xgb_models/XGB_fold0.JSON")
     pred_xgb = xgb.predict_proba(
         test_df[FEATURES_GB], iteration_range=(0, xgb.best_iteration + 1)
     )[:, 1]
-    for f in range(1, xgb_folds):
+    for f in range(1, gb_model_count):
         xgb.load_model(f"xgb_models/XGB_fold{f}.JSON")
         pred_xgb += xgb.predict_proba(
             test_df[FEATURES_GB], iteration_range=(0, xgb.best_iteration + 1)
         )[:, 1]
-    pred_xgb = pred_xgb / xgb_folds
+    pred_xgb = pred_xgb / gb_model_count
+
     # catboost prediciton, mean of all 20 models
     cat = load(f"cat_models/CAT_fold0.joblib")
     pred_cat = cat.predict_proba(test_df[FEATURES_GB])[:, 1]
-    for f in range(1, cat_folds):
+    for f in range(1, gb_model_count):
         load(f"cat_models/CAT_fold{f}.joblib")
         pred_cat += cat.predict_proba(test_df[FEATURES_GB])[:, 1]
-    pred_cat = pred_cat / cat_folds
+    pred_cat = pred_cat / gb_model_count
+
     # lgbm prediction, mean of all 20 models
     lgb = load(f"lgb_models/lgb_fold0.joblib")
     pred_lgb = lgb.predict_proba(test_df[FEATURES_GB])[:, 1]
-    for f in range(1, lgb_folds):
+    for f in range(1, gb_model_count):
         load(f"lgb_models/lgb_fold{f}.joblib")
         pred_lgb += lgb.predict_proba(test_df[FEATURES_GB])[:, 1]
-    pred_lgb = pred_lgb / lgb_folds
+    pred_lgb = pred_lgb / gb_model_count
     # the final prediction is the average of the autogluon, xgboost, catboost, and lgbm predictions.
     test_df["Antimicrobial_Peptide_Prediction"] = (
         0.25 * pred_autogluon[1] + 0.25 * pred_xgb + 0.25 * pred_cat + 0.25 * pred_lgb
     )
-    return test_df[["identifiers", "sequence", "Antimicrobial_Peptide_Prediction"]]
+    return test_df[["peptides", "sequence", "Antimicrobial_Peptide_Prediction"]]
 
 
 def predict(file_path):
-    test = load_test(file_path)
-    print("Loaded Fasta File")
-    print("Now Performing Protbert Inference, 10 Inferences Total")
+    test = load_fasta(file_path)
+    print("Calculating Protbert Predictions, 10 Total Models")
     test["protbert"] = protbert_prediction(file_path)
-    print("Protbert Inference Complete")
-    print("Now Performing ESM Inference, 10 Inferences Total")
+    print("Calculating ESM Predictions, 10 Total Models")
     test["esm"] = esm_prediction(file_path)
-    print("ESM Inference Complete")
     print("Calculating Peptide Descriptors")
     feature_dataframe = peptide_descriptors(test)
-    print("Providing Final Predictions")
+    print("Calculating Final Antimicrobial Peptide Predictions")
     prediction_dataframe = ensemble_predict(feature_dataframe)
     return prediction_dataframe
