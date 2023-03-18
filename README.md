@@ -54,5 +54,22 @@ import AMPTransformer
 from AMPTransformer import predict
 
 ```
+# Predict
+To predict the antimicrobial nature of the peptide sequences contained within a fasta file, we can run the following function.
+
+**Peptide sequences should be between 5 and 100 amino acids in length**
+
+```
+predict(path_to_the_fasta_file, path_to_the_protbert_file_folder, path_to_the_esm_file_folder)
+
+```
+
+An example where the fasta file, protbert model folder, and esm model folder are all placed within the AMPTransformer folder in the working directory.
+The full path relative to the current working directory should be provided.
+
+```
+predict('example.fasta', 'protbert_models/', 'esm_models/')
+
+```
 
 
