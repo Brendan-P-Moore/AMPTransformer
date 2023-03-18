@@ -14,3 +14,10 @@ https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=sha
 **Note: These are large files (1.6-2.5 GB), and the total folder size is approximately 40 GB.**
 
 # Installation
+
+1. Install the required packages.
+
+```
+pip install -r requirements.txt
+
+```
