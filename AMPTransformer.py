@@ -1,6 +1,3 @@
-#google drive download
-import gdown 
-
 # general libraries
 import numpy as np
 import pandas as pd
@@ -39,13 +36,6 @@ from xgboost import XGBClassifier
 from autogluon.features.generators import AutoMLPipelineFeatureGenerator
 from autogluon.tabular import FeatureMetadata
 from autogluon.tabular import TabularDataset, TabularPredictor
-
-#download necessary esm/protbert models from google drive
-
-def download_nlp_models():
-    url = 'https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link'
-    gdown.download_folder(url, quiet=True, use_cookies=False)
-    
 
 # configuration class for NLP models
 class CFG:
