@@ -61,7 +61,7 @@ from AMPTransformer import predict
 # Predict
 To predict the antimicrobial nature of the peptide sequences contained within a fasta file, we can run the following function.
 
-**Peptide sequences should be between 5 and 100 amino acids in length**
+**Peptide sequences should be between 5 and 100 amino acids in length.**
 
 ```
 predict(path_to_the_fasta_file, path_to_the_protbert_file_folder, path_to_the_esm_file_folder)
