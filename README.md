@@ -1,2 +1,5 @@
 # AMPTransformer
-Antimicrobial Peptide Predictor Using Finetuned Protein Transformers
+
+Antimicrobial Peptide Predictor Using Fine-tuned Protein Transformers
+
+# Dependencies
