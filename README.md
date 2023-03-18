@@ -20,7 +20,7 @@ AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses f
 
 # Download NLP Models
 
-Before installation, it is necessary to download the pretrained protbert and ESM_V2 protein NLP models.
+Before installation, it is necessary to download the pretrained ProtBERT and ESM_V2 protein NLP models.
 They can be downloaded from the following Google Drive:
 
 https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link
