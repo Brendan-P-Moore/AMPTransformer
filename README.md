@@ -27,6 +27,10 @@ https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=sha
 
 **Note: The total file size is approximately 30 GB.**
 
+The files can also be found as a dataset on kaggle.
+
+https://www.kaggle.com/datasets/brendanmoore14/amptransformer-models
+
 # Installation
 
 1. Clone the GitHub repository.
@@ -72,4 +76,13 @@ predict('example.fasta', 'protbert_models/', 'esm_models/')
 
 ```
 
+The output of this prediction is a dataframe with three columns. The first column is the peptide label in the fasta file, the second is the sequence, and the third is the antimicrobial prediction. The prediction is a number between 0 and 1, with values above 0.5 being antimicrobial, and those below 0.5 being non-antimicrobial.
 
+```
+prediction_dataframe = predict('example.fasta', 'protbert_models/', 'esm_models/')
+
+```
+
+# Description
+
+AMPTransformer is an antimicrobial peptide classifier trained 
