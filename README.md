@@ -25,7 +25,7 @@ They can be downloaded from the following Google Drive:
 
 https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link
 
-**Note: The total file size is approximately 30 GB.**
+**Note: The total file size is approximately 30 GB, and the files will need to be unzipped prior to use.**
 
 The files can also be found as a dataset on kaggle.
 
