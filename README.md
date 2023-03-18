@@ -3,6 +3,7 @@
 AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses fine-tuned protein NLP models in combination with physicochemical descriptors to classify a FASTA file of peptide sequences. See example.FASTA for an example of this file format. A more detailed description of the model is provided in the Description section, below the usage instructions.
 
 # Dependencies
+* python >= 3.8
 * biopython 1.81
 * numpy 1.23.5
 * torch 1.12.1+cu116
