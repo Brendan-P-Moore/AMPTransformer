@@ -1,3 +1,6 @@
+#google drive download
+import gdown 
+
 # general libraries
 import numpy as np
 import pandas as pd
@@ -37,6 +40,12 @@ from autogluon.features.generators import AutoMLPipelineFeatureGenerator
 from autogluon.tabular import FeatureMetadata
 from autogluon.tabular import TabularDataset, TabularPredictor
 
+#download necessary esm/protbert models from google drive
+
+def download_nlp_models()
+    url = 'https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link'
+    gdown.download_folder(url, quiet=True, use_cookies=False)
+    
 
 # configuration class for NLP models
 class CFG:
@@ -270,11 +279,11 @@ def ensemble_predict(test_df):
     )  # gradient boosted models do not expect a "labels" feature
 
     # autogluon prediction, take mean of all 15 models
-    model = TabularPredictor.load(f"pretrained_models/autogluon_models/fold0/")
+    model = TabularPredictor.load(f"pretrained_models/autogluon_models_reg/fold0/")
     pred_autogluon = model.predict_proba(test_df[FEATURES])
     for f in range(1, autogluon_model_count):
         model = TabularPredictor.load(
-            f"pretrained_models/autogluon_models/fold{f}/"
+            f"pretrained_models/autogluon_models_reg/fold{f}/"
         )
         pred_autogluon += model.predict_proba(test_df[FEATURES])
     pred_autogluon /= autogluon_model_count
