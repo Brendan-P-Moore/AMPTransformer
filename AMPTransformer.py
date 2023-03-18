@@ -42,7 +42,7 @@ from autogluon.tabular import TabularDataset, TabularPredictor
 
 #download necessary esm/protbert models from google drive
 
-def download_nlp_models()
+def download_nlp_models():
     url = 'https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link'
     gdown.download_folder(url, quiet=True, use_cookies=False)
     
