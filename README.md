@@ -1,8 +1,22 @@
 # AMPTransformer
 
-Antimicrobial Peptide Predictor Using Fine-tuned Protein Transformers
+AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses fine-tuned protein NLP models in combination with physicochemical descriptors to classify a FASTA file of peptide sequences. See example.FASTA for an example of this file format. A more detailed description of the model is provided in the Description section, below the usage instructions.
 
 # Dependencies
+* biopython 1.81
+* numpy 1.23.5
+* torch 1.12.1+cu116
+* pandas 1.5.0
+* transformers 4.26.1
+* peptides 0.3.1
+* catboost 1.1.1
+* lightgbm 3.3.5
+* xgboost 1.6.2
+* joblib 1.2.0
+* tokenizers 0.13.2
+* autogluon 0.7.0
+* propy3 1.1.1
+* tqdm 4.65.0
 
 # Download NLP Models
 
@@ -11,13 +25,34 @@ They can be downloaded from the following Google Drive:
 
 https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link
 
-**Note: These are large files (1.6-2.5 GB), and the total folder size is approximately 40 GB.**
+**Note: The total file size is approximately 30 GB.**
 
 # Installation
 
-1. Install the required packages.
+1. Clone the GitHub repository.
+
+```
+git clone https://github.com/Brendan-P-Moore/AMPTransformer
+
+```
+2. Set the current working directory to 
+
+```
+cd AMPTransformer
+
+```
+3. Install the required packages listed in the dependencies section and requirements file.
 
 ```
 pip install -r requirements.txt
 
 ```
+4. Import the AMPTransformer python file, and the predict function.
+
+```
+import AMPTransformer
+from AMPTransformer import predict
+
+```
+
+
