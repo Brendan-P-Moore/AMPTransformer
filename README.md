@@ -19,5 +19,4 @@ https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=sha
 
 ```
 pip install -r requirements.txt
-
 ```
