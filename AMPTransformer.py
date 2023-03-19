@@ -269,11 +269,11 @@ def ensemble_predict(test_df):
     )  # gradient boosted models do not expect a "labels" feature
 
     # autogluon prediction, take mean of all 15 models
-    model = TabularPredictor.load(f"pretrained_models/autogluon_models_reg/fold0/")
+    model = TabularPredictor.load(f"pretrained_models/autogluon_models/fold0/")
     pred_autogluon = model.predict_proba(test_df[FEATURES])
     for f in range(1, autogluon_model_count):
         model = TabularPredictor.load(
-            f"pretrained_models/autogluon_models_reg/fold{f}/"
+            f"pretrained_models/autogluon_models/fold{f}/"
         )
         pred_autogluon += model.predict_proba(test_df[FEATURES])
     pred_autogluon /= autogluon_model_count
