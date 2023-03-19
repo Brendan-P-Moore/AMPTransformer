@@ -27,7 +27,9 @@ They can be downloaded from the following Google Drive:
 
 https://drive.google.com/drive/folders/1HFZvBG0VWW2kO6uJqLSIFCs_TISwjGa-?usp=share_link
 
-**Note: The total file size is approximately 30 GB, and the files will need to be unzipped prior to use.**
+You can add a shortcut to the folder in your Google Drive by right-clicking on the "nlp_models" folder title, and selecting "Add Shortcut to Drive".
+
+**Note: There are zipped and unzipped versions of the files. The zipped versions will need to be unzipped prior to use.**
 
 The files can also be found as a dataset on kaggle.
 
