@@ -35,7 +35,7 @@ https://www.kaggle.com/datasets/brendanmoore14/amptransformer-models
 
 # Google Colaboratory Notebook
 
-The predictor can be run using the following Google Colaboratory notebook
+The predictor can be run using the following Google Colaboratory notebook:
 
 https://colab.research.google.com/drive/1HE0n7tk53NVMpdCURF_JFmIsNESn2g-v?usp=sharing
 
