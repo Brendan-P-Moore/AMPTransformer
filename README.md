@@ -32,7 +32,13 @@ The files can also be found as a dataset on kaggle.
 
 https://www.kaggle.com/datasets/brendanmoore14/amptransformer-models
 
-# Installation
+# Colab Notebooks
+
+The predictor can be run using the following Google Colaboratory notebook
+
+**Please make a copy of the notebook so that your changes can be saved.**
+
+# Installation Guide
 
 1. Clone the GitHub repository.
 
@@ -69,22 +75,31 @@ predict(path_to_the_fasta_file, path_to_the_protbert_file_folder, path_to_the_es
 
 ```
 
-An example from google colab:
+An example from the Google Colaboratory notebook:
 
 ```
-predict('/content/AMPTransformer/example.fasta', '/content/protbert_models', '/content/esm_models')
+predict('/content/AMPTransformer/test_data/CAMP_test_neg.fasta', '/content/drive/MyDrive/nlp_models/protbert_models', '/content/drive/MyDrive/nlp_models/esm_models')
 
 ```
 
 The output of this prediction is a dataframe with three columns. The first column is the peptide label in the fasta file, the second is the sequence, and the third is the antimicrobial prediction. The prediction is a number between 0 and 1, with values above 0.5 being antimicrobial, and those below 0.5 being non-antimicrobial.
 
 ```
-prediction_dataframe = predict('/content/AMPTransformer/example.fasta', '/content/protbert_models', '/content/esm_models')
+prediction_dataframe = predict('/content/AMPTransformer/test_data/CAMP_test_neg.fasta', '/content/drive/MyDrive/nlp_models/protbert_models', '/content/drive/MyDrive/nlp_models/esm_models')
 
 ```
 **For prediction of many peptide sequences, it is recommended to use a GPU.**
 # Description
 
-AMPTransformer is an antimicrobial peptide classifier trained on the length-balanced training datasets used by amPEPpy. These datasets were selected because of the equal peptide length distribution for the antimicrobial and non-antimicrobial peptides.
+AMPTransformer is an antimicrobial peptide classifier trained on the length-balanced training datasets used by amPEPpy (reference). These datasets were selected because of the equal peptide sequence length distribution for the antimicrobial and non-antimicrobial peptides (reference). Because of this, AMPTransformer is more useful at discerning between antimicrobial/non-antimicrobial peptides of equal length.
+
+AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al.(reference). The predictor's performance was compared with amPEPpy, a random forest model trained on the same training dataset. The comparison with amPEPpy is shown in the table below (to be added). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
 
 # References
+
+protbert
+esm 2
+amPEPpy
+amPEP
+sAMPpred-GAT
+xu 2021 dataset
