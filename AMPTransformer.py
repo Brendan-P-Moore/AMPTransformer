@@ -34,7 +34,7 @@ import lightgbm
 from lightgbm import LGBMClassifier
 import xgboost
 from xgboost import XGBClassifier
-
+from autogluon.features.generators import AutoMLPipelineFeatureGenerator
 from autogluon.tabular import TabularDataset, TabularPredictor
 
 # configuration class for NLP models
