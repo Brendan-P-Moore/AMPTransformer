@@ -18,6 +18,7 @@ AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses f
 * autogluon 0.7.0
 * propy3 1.1.1
 * tqdm 4.65.0
+* scikit-learn == 1.1.2
 
 # Download NLP Models
 
