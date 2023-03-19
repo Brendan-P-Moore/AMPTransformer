@@ -5,8 +5,8 @@ AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses f
 # Dependencies
 * python >= 3.9
 * biopython 1.81
-* numpy 1.23.5
-* torch 1.12.1+cu116
+* numpy 1.21.6
+* torch 1.13.1
 * pandas 1.5.0
 * transformers 4.26.1
 * peptides 0.3.1
@@ -60,7 +60,7 @@ from AMPTransformer import predict
 
 ```
 # Predict
-To predict the antimicrobial nature of the peptide sequences contained within a fasta file, we can run the following function.
+To predict the antimicrobial nature of the peptide sequences contained within a fasta file, we can run the following function. The path to the fasta file and model folders must be the absolute path.
 
 **Peptide sequences should be between 5 and 100 amino acids in length. The ES**
 
@@ -69,18 +69,17 @@ predict(path_to_the_fasta_file, path_to_the_protbert_file_folder, path_to_the_es
 
 ```
 
-An example where the fasta file, protbert model folder, and esm model folder are all placed within the AMPTransformer folder in the working directory.
-The full path relative to the current working directory should be provided.
+An example from google colab:
 
 ```
-predict('example.fasta', 'protbert_models/', 'esm_models/')
+predict('/content/AMPTransformer/example.fasta', '/content/protbert_models', '/content/esm_models')
 
 ```
 
 The output of this prediction is a dataframe with three columns. The first column is the peptide label in the fasta file, the second is the sequence, and the third is the antimicrobial prediction. The prediction is a number between 0 and 1, with values above 0.5 being antimicrobial, and those below 0.5 being non-antimicrobial.
 
 ```
-prediction_dataframe = predict('example.fasta', 'protbert_models/', 'esm_models/')
+prediction_dataframe = predict('/content/AMPTransformer/example.fasta', '/content/protbert_models', '/content/esm_models')
 
 ```
 **For prediction of many peptide sequences, it is recommended to use a GPU.**
