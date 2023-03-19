@@ -62,7 +62,7 @@ from AMPTransformer import predict
 # Predict
 To predict the antimicrobial nature of the peptide sequences contained within a fasta file, we can run the following function.
 
-**Peptide sequences should be between 5 and 100 amino acids in length.**
+**Peptide sequences should be between 5 and 100 amino acids in length. The ES**
 
 ```
 predict(path_to_the_fasta_file, path_to_the_protbert_file_folder, path_to_the_esm_file_folder)
@@ -83,7 +83,7 @@ The output of this prediction is a dataframe with three columns. The first colum
 prediction_dataframe = predict('example.fasta', 'protbert_models/', 'esm_models/')
 
 ```
-**For many peptide predictions it is recommended to use a gpu.**
+**For prediction of many peptide sequences, it is recommended to use a GPU.**
 # Description
 
 AMPTransformer is an antimicrobial peptide classifier trained on the length-balanced training datasets used by amPEPpy. These datasets were selected because of the equal peptide length distribution for the antimicrobial and non-antimicrobial peptides.
