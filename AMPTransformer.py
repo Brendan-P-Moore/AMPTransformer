@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import gc
+import os
 
 # for the NLP models
 import transformers  # for NLP protein models
@@ -214,7 +215,8 @@ def nlp_predict(test):
 def protbert_predict(file_path, protbert_folder_path):
     # define the path and output directory
     try:
-        CFG.path = f"{protbert_folder_path}"
+        absolute_path = os.path.abspath(protbert_folder_path)
+        CFG.path = absolute_path
     except:
         print("Must download protbert model files, see github instructions for details")
     # configuration for the protbert model
@@ -231,7 +233,8 @@ def protbert_predict(file_path, protbert_folder_path):
 def esm_predict(file_path, esm_folder_path):
     # define the path and output directory
     try:
-        CFG.path = f"{esm_folder_path}"
+        absolute_path = os.path.abspath(esm_folder_path)
+        CFG.path = absolute_path
     except:
         print("Must download ESM model files, see github instructions for details")
     # esm model
