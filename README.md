@@ -33,7 +33,7 @@ The files can also be found as a dataset on kaggle.
 
 https://www.kaggle.com/datasets/brendanmoore14/amptransformer-models
 
-# Colab Notebooks
+# Google Colaboratory Notebook
 
 The predictor can be run using the following Google Colaboratory notebook
 
