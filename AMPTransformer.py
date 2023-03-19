@@ -163,7 +163,7 @@ def load_fasta(file_path):
     return test
 
 
-# predict antimicrobial vs non-antimicrobial on each sequence batch and append to preds
+# predict antimicrobial vs non-antimicrobial on each sequence batch and append to a list of predictions
 def inference(test_loader, model, device):
     preds = []
     model.eval()
@@ -178,7 +178,7 @@ def inference(test_loader, model, device):
     predictions = np.concatenate(preds)
     return predictions
 
-
+# antimicrobial prediction function for the nlp models
 def nlp_predict(test):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     test["sequence"] = test.sequence.map(add_spaces)
