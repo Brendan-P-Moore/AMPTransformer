@@ -107,9 +107,9 @@ class CustomModel(nn.Module):
 # prepare the sequences input for prediction by the finetuned NLP models
 def prepare_input(cfg, text):
     if "esm" in cfg.model:
-        tokenizer = AutoTokenizer.from_pretrained("esm_models/tokenizer/")
+        tokenizer = AutoTokenizer.from_pretrained(CFG.path + "tokenizer")
     else:
-        tokenizer = AutoTokenizer.from_pretrained("protbert_models/tokenizer/")
+        tokenizer = AutoTokenizer.from_pretrained(CFG.path + "tokenizer")
     inputs = tokenizer.encode_plus(
         text,
         return_tensors=None,
@@ -149,7 +149,7 @@ def add_spaces(x):
 
 # load the fasta sequence file as a dataframe
 def load_fasta(file_path):
-    with open(file_path) as fasta_file:
+    with open(os.path.abspath(file_path)) as fasta_file:
         peptides = []
         seq = []
         for seq_record in SeqIO.parse(fasta_file, "fasta"):  # (generator)
@@ -215,8 +215,7 @@ def nlp_predict(test):
 def protbert_predict(file_path, protbert_folder_path):
     # define the path and output directory
     try:
-        absolute_path = os.path.abspath(protbert_folder_path)
-        CFG.path = absolute_path
+        CFG.path = os.path.abspath(protbert_folder_path) + "/"
     except:
         print("Must download protbert model files, see github instructions for details")
     # configuration for the protbert model
@@ -233,8 +232,7 @@ def protbert_predict(file_path, protbert_folder_path):
 def esm_predict(file_path, esm_folder_path):
     # define the path and output directory
     try:
-        absolute_path = os.path.abspath(esm_folder_path)
-        CFG.path = absolute_path
+        CFG.path = os.path.abspath(esm_folder_path) + "/"
     except:
         print("Must download ESM model files, see github instructions for details")
     # esm model
@@ -272,11 +270,11 @@ def ensemble_predict(test_df):
     )  # gradient boosted models do not expect a "labels" feature
 
     # autogluon prediction, take mean of all 15 models
-    model = TabularPredictor.load(f"pretrained_models/autogluon_models/fold0/")
+    model = TabularPredictor.load(f"pretrained_models/autogluon_models_reg/fold0/")
     pred_autogluon = model.predict_proba(test_df[FEATURES])
     for f in range(1, autogluon_model_count):
         model = TabularPredictor.load(
-            f"pretrained_models/autogluon_models/fold{f}/"
+            f"pretrained_models/autogluon_models_reg/fold{f}/"
         )
         pred_autogluon += model.predict_proba(test_df[FEATURES])
     pred_autogluon /= autogluon_model_count
