@@ -51,7 +51,7 @@ https://colab.research.google.com/drive/1HE0n7tk53NVMpdCURF_JFmIsNESn2g-v?usp=sh
 git clone https://github.com/Brendan-P-Moore/AMPTransformer
 
 ```
-2. Set the current working directory to 
+2. Set the current working directory to the AMPTransformer folder.
 
 ```
 cd AMPTransformer
