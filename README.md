@@ -96,7 +96,7 @@ prediction_dataframe = predict('/content/AMPTransformer/test_data/CAMP_test_neg.
 
 AMPTransformer is an antimicrobial peptide classifier trained on the length-balanced training datasets used by amPEPpy (3,4). These datasets were selected because of the equal peptide sequence length distribution for the antimicrobial and non-antimicrobial peptides (3,4). Because of this, AMPTransformer is more useful at discerning between antimicrobial/non-antimicrobial peptides of equal length. Other predictors should be used if the peptides of interest have large variation in sequence length.
 
-AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al.(5,6). The predictor's performance compared with amPEPpy, a random forest model trained on the same training dataset, is shown in the table below (3). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
+AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al., and details of the test sets are described therein (5,6). The predictor's performance compared with amPEPpy, a random forest model trained on the same training dataset, is shown in the table below (3). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
 
 # References
 
