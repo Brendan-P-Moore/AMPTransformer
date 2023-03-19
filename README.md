@@ -4,21 +4,21 @@ AMPTransformer classifies peptides as antimicrobial/non-antimicrobial. It uses f
 
 # Dependencies
 * python >= 3.9
-* biopython 1.81
 * numpy 1.21.6
-* torch 1.13.1
 * pandas 1.5.0
+* torch 1.13.1
 * transformers 4.26.1
+* tokenizers 0.13.2
+* biopython 1.81
 * peptides 0.3.1
+* propy3 1.1.1
+* scikit-learn 1.1.2
 * catboost 1.1.1
 * lightgbm 3.3.5
 * xgboost 1.6.2
-* joblib 1.2.0
-* tokenizers 0.13.2
 * autogluon 0.7.0
-* propy3 1.1.1
+* joblib 1.2.0
 * tqdm 4.65.0
-* scikit-learn 1.1.2
 
 # Download NLP Models
 
