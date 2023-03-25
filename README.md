@@ -109,3 +109,6 @@ AMPTransformer was evaluated on eight non-redundant test datasets published by Y
 5. Yan, K. et al. sAMPpred-GAT: Prediction of Antimicrobial Peptide by Graph Attention Network and Predicted Peptide Structure. Bioinformatics. 2023 Jan 1;39(1):btac715. doi: 10.1093/bioinformatics/btac715.
 6. Xu, J. et al. Comprehensive assessment of machine learning-based methods for predicting antimicrobial peptides, Briefings in Bioinformatics, Volume 22, Issue 5, September 2021, bbab083, doi: 10.1093/bib/bbab083.
 
+# FAQ
+
+To be updated as questions arise.
