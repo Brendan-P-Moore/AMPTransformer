@@ -100,42 +100,43 @@ AMPTransformer is an antimicrobial peptide classifier trained on the length-bala
 
 AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al., and details of the test sets are described therein (5,6). The predictor's performance compared with amPEPpy, a random forest model trained on the same training dataset, is shown in the table below (3). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
 
-| amPEPpy                      | 0.636393 | 0.522853 | 0.760248  | 0.398438 | 0.310163 | 0.713535 | 0.767798 |   |              |      |
-|------------------------------|----------|----------|-----------|----------|----------|----------|----------|---|--------------|------|
-| AMPTransformer               | 0.635091 | 0.501999 | 0.79021   | 0.367839 | 0.31968  | 0.742631 | 0.915222 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| DBAASP                       | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 356  |
-| amPEPpy                      | 0.766854 | 0.743034 | 0.827586  | 0.674157 | 0.543123 | 0.869934 | 0.47848  |   |              |      |
-| AMPTransformer               | 0.744382 | 0.69967  | 0.848     | 0.595506 | 0.511986 | 0.857783 | 0.554793 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| dbAMP                        | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 440  |
-| amPEPpy                      | 0.802273 | 0.774026 | 0.90303   | 0.677273 | 0.624372 | 0.878171 | 0.478792 |   |              |      |
-| AMPTransformer               | 0.834091 | 0.819753 | 0.897297  | 0.754545 | 0.676802 | 0.92157  | 0.387522 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| LAMP                         | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 1750 |
-| amPEPpy                      | 0.728    | 0.661932 | 0.874296  | 0.532571 | 0.495409 | 0.825579 | 0.587576 |   |              |      |
-| AMPTransformer               | 0.750286 | 0.699656 | 0.877586  | 0.581714 | 0.531701 | 0.864597 | 0.568775 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| DRAMP                        | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   |  Count:      | 2364 |
-| amPEPpy                      | 0.689932 | 0.597031 | 0.852433  | 0.459391 | 0.428085 | 0.720348 | 0.748033 |   |              |      |
-| AMPTransformer               | 0.664552 | 0.536528 | 0.867675  | 0.388325 | 0.394824 | 0.717561 | 0.957541 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| CAMP                         | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 44   |
-| amPEPpy                      | 0.840909 | 0.829268 | 0.894737  | 0.772727 | 0.688247 | 0.856405 | 0.509576 |   |              |      |
-| AMPTransformer               | 0.772727 | 0.736842 | 0.875     | 0.636364 | 0.566947 | 0.886364 | 0.452104 |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| APD3                         | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 354  |
-| amPEPpy                      | 0.884181 | 0.881159 | 0.904762  | 0.858757 | 0.769357 | 0.924096 | 0.375235 |   |              |      |
-| AMPTransformer               |          |          |           |          |          |          |          |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| YADAMP                       | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Count:       | 226  |
-| amPEPpy                      | 0.893805 | 0.888889 | 0.932039  | 0.849558 | 0.790713 | 0.950153 | 0.338871 |   |              |      |
-| AMPTransformer               |          |          |           |          |          |          |          |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-|                              |          |          |           |          |          |          |          |   |              |      |
-| Weighted Overall Performance | Accuracy | f1_score | Precision | Recall   | MCC      | AUC      | Log Loss |   | Total Count: | 8606 |
-| amPEPpy                      | 0.701604 | 0.619378 | 0.829991  | 0.500813 | 0.439367 | 0.768683 | 0.670245 |   |              |      |
-| AMPTransformer               | 0.639205 | 0.543468 | 0.7843    | 0.422728 | 0.389368 | 0.725143 | 0.750459 |   |              |      |
+| Test datasets                |          |          |           |        |       |       |   |                     |      |   |
+|------------------------------|----------|----------|-----------|--------|-------|-------|---|---------------------|------|---|
+| XUAMP                        | Accuracy | F1 score | Precision | Recall | MCC   | AUC   |   | number of proteins: | 3072 |   |
+| amPEPpy                      | 0.636    | 0.523    | 0.760     | 0.398  | 0.310 | 0.714 |   |                     |      |   |
+| AMPTransformer               | 0.635    | 0.502    | 0.790     | 0.368  | 0.320 | 0.743 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| DBAASP                       |          |          |           |        |       |       |   | number of proteins: | 356  |   |
+| amPEPpy                      | 0.767    | 0.743    | 0.828     | 0.674  | 0.543 | 0.870 |   |                     |      |   |
+| AMPTransformer               | 0.744    | 0.700    | 0.848     | 0.596  | 0.512 | 0.858 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| dbAMP                        |          |          |           |        |       |       |   | number of proteins: | 440  |   |
+| amPEPpy                      | 0.802    | 0.774    | 0.903     | 0.677  | 0.624 | 0.878 |   |                     |      |   |
+| AMPTransformer               | 0.834    | 0.820    | 0.897     | 0.755  | 0.677 | 0.922 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| LAMP                         |          |          |           |        |       |       |   | number of proteins: | 1750 |   |
+| amPEPpy                      | 0.728    | 0.662    | 0.874     | 0.533  | 0.495 | 0.826 |   |                     |      |   |
+| AMPTransformer               | 0.750    | 0.700    | 0.878     | 0.582  | 0.532 | 0.865 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| DRAMP                        |          |          |           |        |       |       |   | number of proteins: | 2364 |   |
+| amPEPpy                      | 0.690    | 0.597    | 0.852     | 0.459  | 0.428 | 0.720 |   |                     |      |   |
+| AMPTransformer               | 0.665    | 0.537    | 0.868     | 0.388  | 0.395 | 0.718 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| CAMP                         |          |          |           |        |       |       |   | number of proteins: | 44   |   |
+| amPEPpy                      | 0.841    | 0.829    | 0.895     | 0.773  | 0.688 | 0.856 |   |                     |      |   |
+| AMPTransformer               | 0.773    | 0.737    | 0.875     | 0.636  | 0.567 | 0.886 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| APD3                         |          |          |           |        |       |       |   | number of proteins: | 354  |   |
+| amPEPpy                      | 0.884    | 0.881    | 0.905     | 0.859  | 0.769 | 0.924 |   |                     |      |   |
+| AMPTransformer               | 0.864    | 0.860    | 0.886     | 0.836  | 0.730 | 0.927 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| YADAMP                       |          |          |           |        |       |       |   | number of proteins: | 226  |   |
+| amPEPpy                      | 0.894    | 0.889    | 0.932     | 0.850  | 0.791 | 0.950 |   |                     |      |   |
+| AMPTransformer               | 0.881    | 0.873    | 0.930     | 0.823  | 0.766 | 0.957 |   |                     |      |   |
+|                              |          |          |           |        |       |       |   |                     |      |   |
+| Weighted Overall Performance |          |          |           |        |       |       |   | total proteins:     | 8606 |   |
+| amPEPpy                      | 0.702    | 0.619    | 0.830     | 0.501  | 0.439 | 0.769 |   |                     |      |   |
+| AMPTransformer               | 0.698    | 0.602    | 0.845     | 0.479  | 0.440 | 0.788 |   |                     |      |   |
 
 # References
 
