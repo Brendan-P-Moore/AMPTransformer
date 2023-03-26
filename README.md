@@ -100,6 +100,8 @@ AMPTransformer is an antimicrobial peptide classifier trained on the length-bala
 
 AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al., and details of the test sets are described therein (5,6). The predictor's performance compared with amPEPpy, a random forest model trained on the same training dataset, is shown in the table below (3). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
 
+Overall, AMPTransformer has similar accuracy and matthews correlation coefficients to ampPEPpy, better overall area under the curve and precision, and worse F1 score and recall. This varies by test data set, however, with AMPTransformer performing better relative to amPEPpy on test datasets with more length-balanced datasets such as XUAMP, dbAMP, and LAMP. The distribution of lengths for positive and negative samples in the test datasets can be found in the supplementary material of Yan et al. (5).
+
 | Test datasets                |          |          |           |        |       |       |   |                     |      |   |
 |------------------------------|----------|----------|-----------|--------|-------|-------|---|---------------------|------|---|
 | XUAMP                        | Accuracy | F1 score | Precision | Recall | MCC   | AUC   |   | Number of peptides: | 3072 |   |
