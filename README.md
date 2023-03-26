@@ -101,14 +101,17 @@ AMPTransformer is an antimicrobial peptide classifier trained on the length-bala
 AMPTransformer was evaluated on eight non-redundant test datasets published by Yan et al., and details of the test sets are described therein (5,6). The predictor's performance compared with amPEPpy, a random forest model trained on the same training dataset, is shown in the table below (3). As the test sets are not length-balanced, and are non-redundant only for amPEPpyy, the performance of the AMPTransformer on the independent test sets cannot be compared directly with other methods.
 
 | Test datasets                |          |          |           |        |       |       |   |                     |      |   |
+---
 |------------------------------|----------|----------|-----------|--------|-------|-------|---|---------------------|------|---|
 | XUAMP                        | Accuracy | F1 score | Precision | Recall | MCC   | AUC   |   | number of proteins: | 3072 |   |
 | amPEPpy                      | 0.636    | 0.523    | 0.760     | 0.398  | 0.310 | 0.714 |   |                     |      |   |
 | AMPTransformer               | 0.635    | 0.502    | 0.790     | 0.368  | 0.320 | 0.743 |   |                     |      |   |
+---
 |                              |          |          |           |        |       |       |   |                     |      |   |
 | DBAASP                       |          |          |           |        |       |       |   | number of proteins: | 356  |   |
 | amPEPpy                      | 0.767    | 0.743    | 0.828     | 0.674  | 0.543 | 0.870 |   |                     |      |   |
 | AMPTransformer               | 0.744    | 0.700    | 0.848     | 0.596  | 0.512 | 0.858 |   |                     |      |   |
+---
 |                              |          |          |           |        |       |       |   |                     |      |   |
 | dbAMP                        |          |          |           |        |       |       |   | number of proteins: | 440  |   |
 | amPEPpy                      | 0.802    | 0.774    | 0.903     | 0.677  | 0.624 | 0.878 |   |                     |      |   |
