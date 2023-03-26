@@ -102,43 +102,43 @@ AMPTransformer was evaluated on eight non-redundant test datasets published by Y
 
 Overall, AMPTransformer has similar accuracy and matthews correlation coefficients to ampPEPpy, better overall area under the curve and precision, and worse F1 score and recall. This varies by test data set, however, with AMPTransformer performing better relative to amPEPpy on test datasets with more length-balanced datasets such as XUAMP, dbAMP, and LAMP. The distribution of lengths for positive and negative samples in the test datasets can be found in the supplementary material of Yan et al. (5).
 
-| Test datasets                |          |          |           |        |       |       |   |                     |      |   |
-|------------------------------|----------|----------|-----------|--------|-------|-------|---|---------------------|------|---|
-| XUAMP                        | Accuracy | F1 score | Precision | Recall | MCC   | AUC   |   | Number of peptides: | 3072 |   |
-| amPEPpy                      | 0.636    | 0.523    | 0.760     | 0.398  | 0.310 | 0.714 |   |                     |      |   |
-| AMPTransformer               | 0.635    | 0.502    | 0.790     | 0.368  | 0.320 | 0.743 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| DBAASP                       |          |          |           |        |       |       |   | Number of proteins: | 356  |   |
-| amPEPpy                      | 0.767    | 0.743    | 0.828     | 0.674  | 0.543 | 0.870 |   |                     |      |   |
-| AMPTransformer               | 0.744    | 0.700    | 0.848     | 0.596  | 0.512 | 0.858 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| dbAMP                        |          |          |           |        |       |       |   |  Number of peptides: | 440  |   |
-| amPEPpy                      | 0.802    | 0.774    | 0.903     | 0.677  | 0.624 | 0.878 |   |                     |      |   |
-| AMPTransformer               | 0.834    | 0.820    | 0.897     | 0.755  | 0.677 | 0.922 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| LAMP                         |          |          |           |        |       |       |   |  Number of peptides: | 1750 |   |
-| amPEPpy                      | 0.728    | 0.662    | 0.874     | 0.533  | 0.495 | 0.826 |   |                     |      |   |
-| AMPTransformer               | 0.750    | 0.700    | 0.878     | 0.582  | 0.532 | 0.865 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| DRAMP                        |          |          |           |        |       |       |   |  Number of peptides: | 2364 |   |
-| amPEPpy                      | 0.690    | 0.597    | 0.852     | 0.459  | 0.428 | 0.720 |   |                     |      |   |
-| AMPTransformer               | 0.665    | 0.537    | 0.868     | 0.388  | 0.395 | 0.718 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| CAMP                         |          |          |           |        |       |       |   |  Number of peptides: | 44   |   |
-| amPEPpy                      | 0.841    | 0.829    | 0.895     | 0.773  | 0.688 | 0.856 |   |                     |      |   |
-| AMPTransformer               | 0.773    | 0.737    | 0.875     | 0.636  | 0.567 | 0.886 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| APD3                         |          |          |           |        |       |       |   |  Number of peptides: | 354  |   |
-| amPEPpy                      | 0.884    | 0.881    | 0.905     | 0.859  | 0.769 | 0.924 |   |                     |      |   |
-| AMPTransformer               | 0.864    | 0.860    | 0.886     | 0.836  | 0.730 | 0.927 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| YADAMP                       |          |          |           |        |       |       |   |  Number of peptides: | 226  |   |
-| amPEPpy                      | 0.894    | 0.889    | 0.932     | 0.850  | 0.791 | 0.950 |   |                     |      |   |
-| AMPTransformer               | 0.881    | 0.873    | 0.930     | 0.823  | 0.766 | 0.957 |   |                     |      |   |
-|                              |          |          |           |        |       |       |   |                     |      |   |
-| Weighted Overall Performance |          |          |           |        |       |       |   | Total peptides:     | 8606 |   |
-| amPEPpy                      | 0.702    | 0.619    | 0.830     | 0.501  | 0.439 | 0.769 |   |                     |      |   |
-| AMPTransformer               | 0.698    | 0.602    | 0.845     | 0.479  | 0.440 | 0.788 |   |                     |      |   |
+| Test datasets                |          |          |           |        |       |       |   |                     |      | 
+|------------------------------|----------|----------|-----------|--------|-------|-------|---|---------------------|------|
+| XUAMP                        | Accuracy | F1 score | Precision | Recall | MCC   | AUC   |   | Number of peptides: | 3072 | 
+| amPEPpy                      | 0.636    | 0.523    | 0.760     | 0.398  | 0.310 | 0.714 |   |                     |      |   
+| AMPTransformer               | 0.635    | 0.502    | 0.790     | 0.368  | 0.320 | 0.743 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| DBAASP                       |          |          |           |        |       |       |   | Number of proteins: | 356  |   
+| amPEPpy                      | 0.767    | 0.743    | 0.828     | 0.674  | 0.543 | 0.870 |   |                     |      |  
+| AMPTransformer               | 0.744    | 0.700    | 0.848     | 0.596  | 0.512 | 0.858 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| dbAMP                        |          |          |           |        |       |       |   |  Number of peptides: | 440  |   
+| amPEPpy                      | 0.802    | 0.774    | 0.903     | 0.677  | 0.624 | 0.878 |   |                     |      |   
+| AMPTransformer               | 0.834    | 0.820    | 0.897     | 0.755  | 0.677 | 0.922 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| LAMP                         |          |          |           |        |       |       |   |  Number of peptides: | 1750 |   
+| amPEPpy                      | 0.728    | 0.662    | 0.874     | 0.533  | 0.495 | 0.826 |   |                     |      |   
+| AMPTransformer               | 0.750    | 0.700    | 0.878     | 0.582  | 0.532 | 0.865 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |  
+| DRAMP                        |          |          |           |        |       |       |   |  Number of peptides: | 2364 |   
+| amPEPpy                      | 0.690    | 0.597    | 0.852     | 0.459  | 0.428 | 0.720 |   |                     |      |   
+| AMPTransformer               | 0.665    | 0.537    | 0.868     | 0.388  | 0.395 | 0.718 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| CAMP                         |          |          |           |        |       |       |   |  Number of peptides: | 44   |   
+| amPEPpy                      | 0.841    | 0.829    | 0.895     | 0.773  | 0.688 | 0.856 |   |                     |      |   
+| AMPTransformer               | 0.773    | 0.737    | 0.875     | 0.636  | 0.567 | 0.886 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| APD3                         |          |          |           |        |       |       |   |  Number of peptides: | 354  |   
+| amPEPpy                      | 0.884    | 0.881    | 0.905     | 0.859  | 0.769 | 0.924 |   |                     |      |   
+| AMPTransformer               | 0.864    | 0.860    | 0.886     | 0.836  | 0.730 | 0.927 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| YADAMP                       |          |          |           |        |       |       |   |  Number of peptides: | 226  |   
+| amPEPpy                      | 0.894    | 0.889    | 0.932     | 0.850  | 0.791 | 0.950 |   |                     |      |   
+| AMPTransformer               | 0.881    | 0.873    | 0.930     | 0.823  | 0.766 | 0.957 |   |                     |      |   
+|                              |          |          |           |        |       |       |   |                     |      |   
+| Weighted Overall Performance |          |          |           |        |       |       |   | Total peptides:     | 8606 |   
+| amPEPpy                      | 0.702    | 0.619    | 0.830     | 0.501  | 0.439 | 0.769 |   |                     |      |   
+| AMPTransformer               | 0.698    | 0.602    | 0.845     | 0.479  | 0.440 | 0.788 |   |                     |      |   
 
 # References
 
